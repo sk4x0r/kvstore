@@ -41,8 +41,7 @@ func handleConnection(conn net.Conn){
 			fmt.Print(err.Error())
 			return
 		}
-		print("Received command:")
-		print(command)
+		print("Received command:"+command)
 		words:=strings.Fields(command)
 		action:=words[0]
 		

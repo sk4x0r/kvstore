@@ -35,7 +35,7 @@ func main() {
 
 	_, err = conn.Write([]byte(command))
 	checkError(err)
-	print("Sent data")
+	print("Sent the command to server")
 
 	result, err := ioutil.ReadAll(conn)
 	checkError(err)
