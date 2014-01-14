@@ -1,7 +1,7 @@
 import os
 from random import randint
 
-DEBUG=True
+DEBUG=True #Setting this to false will disable console outputs
 def printf(s):
 	if DEBUG:
 		print s
