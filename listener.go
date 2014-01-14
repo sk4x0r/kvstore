@@ -62,7 +62,11 @@ func handleConnection(conn net.Conn){
 			case "set":
 				print("case set")
 				key:=words[1]
-				value:=words[2]
+				value:=""
+				for i:=2;i<len(words);i++{
+					value+=words[i]+" "
+				}
+				value=value[:len(value)-1]
 				dict[key]=value
 				print("key="+key)
 				print("value="+value)

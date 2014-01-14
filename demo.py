@@ -1,10 +1,11 @@
 import os
 from random import randint
 import subprocess
-
+'''
 print("Starting server")
 subprocess.Popen("go run listener.go")
 #os.system("go run listener.go")
+'''
 
 INPUT_FILE='input2.txt'
 SET_COMMAND="go run client.go set "
