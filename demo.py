@@ -11,7 +11,7 @@ subprocess.Popen("go run listener.go")
 #os.system("go run listener.go")
 '''
 
-INPUT_FILE='input2.txt' #file from which demo data of key value pairs is loaded
+INPUT_FILE='input.txt' #file from which demo data of key value pairs is loaded
 
 #following lines store some data into key value store
 SET_COMMAND="go run client.go set "
