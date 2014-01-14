@@ -1,6 +1,10 @@
 import os
 from random import randint
-import subprocess
+
+DEBUG=True
+def printf(s):
+	if DEBUG:
+		print s
 '''
 print("Starting server")
 subprocess.Popen("go run listener.go")
@@ -24,7 +28,7 @@ DELETE_COMMAND="go run client.go delete "
 with open(INPUT_FILE) as fp:
     for line in fp:
 		if randint(0,1)==1:
-			print("deleting")
+			printf("deleting")
 			cmd=DELETE_COMMAND+line.strip().split()[0]
 			os.system(cmd)
 

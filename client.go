@@ -7,6 +7,13 @@ import (
 	"io/ioutil"
 )
 
+var DEBUG int=1
+func print(s string){
+	if DEBUG==1{
+		fmt.Println(s)
+	}
+}
+
 func main() {
 	command:=""
 	for i:=1;i<len(os.Args);i++{
@@ -14,23 +21,23 @@ func main() {
 	}
 	command=command[:len(command)-1]+"\n"
 	
-	fmt.Println(command)
+	print(command)
 	
 	server := "127.0.0.1:12343"
 
-	fmt.Println("Dialing..")
+	print("Dialing connection")
 	conn, err := net.Dial("tcp", server)
 	checkError(err)
-	fmt.Println("Connected")
+	print("Connected")
 
 	_, err = conn.Write([]byte(command))
 	checkError(err)
-	fmt.Println("Sent data")
+	print("Sent data")
 
 	result, err := ioutil.ReadAll(conn)
 	checkError(err)
-	fmt.Println("Result is")
-	fmt.Println(string(result))
+	print("Result is")
+	print(string(result))
 	os.Exit(0)
 }
 

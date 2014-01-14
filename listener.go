@@ -53,7 +53,7 @@ func handleConnection(conn net.Conn){
 				key:=words[1]
 				value, ok := dict[key]
 				if ok{
-					conn.Write([]byte(value+"\n"))
+					conn.Write([]byte(value))
 				}else{
 					print("Key does not exist")
 					conn.Write([]byte("KEY_DOES_NOT_EXIST"))
@@ -72,16 +72,16 @@ func handleConnection(conn net.Conn){
 				print("value="+value)
 				print("printing value from dict")
 				print(dict[key])
-				conn.Write([]byte("SUCCESS\n"))
+				conn.Write([]byte("SUCCESS"))
 			case "delete":
 				print("case delete")
 				key:=words[1]
 				_, ok:=dict[key]
 				if ok{
 					delete(dict,key)
-					conn.Write([]byte("SUCCESS\n"))
+					conn.Write([]byte("SUCCESS"))
 				}else{
-					conn.Write([]byte("KEY_DOES_NOT_EXIST\n"))
+					conn.Write([]byte("KEY_DOES_NOT_EXIST"))
 				}
 		}
 }
