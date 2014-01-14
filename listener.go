@@ -6,7 +6,7 @@ import(
 	"bufio"
 	"strings"
 )
-var DEBUG int=1
+var DEBUG int=1 //Setting this to value 0 will disable console outputs
 func print(s string){
 	if DEBUG==1{
 		fmt.Println(s)
@@ -46,10 +46,8 @@ func handleConnection(conn net.Conn){
 		words:=strings.Fields(command)
 		action:=words[0]
 		
-		print("action="+action)
 		switch action{
 			case "get":
-				print("case get")
 				key:=words[1]
 				value, ok := dict[key]
 				if ok{
@@ -60,7 +58,6 @@ func handleConnection(conn net.Conn){
 				}
 				
 			case "set":
-				print("case set")
 				key:=words[1]
 				value:=""
 				for i:=2;i<len(words);i++{
@@ -68,13 +65,8 @@ func handleConnection(conn net.Conn){
 				}
 				value=value[:len(value)-1]
 				dict[key]=value
-				print("key="+key)
-				print("value="+value)
-				print("printing value from dict")
-				print(dict[key])
 				conn.Write([]byte("SUCCESS"))
 			case "delete":
-				print("case delete")
 				key:=words[1]
 				_, ok:=dict[key]
 				if ok{
