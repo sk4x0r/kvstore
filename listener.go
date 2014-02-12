@@ -1,78 +1,70 @@
-package main
-import(
+package kvstore
+
+import (
+	"encoding/json"
 	"fmt"
-	"net"
+	zmq "github.com/pebbe/zmq4"
 	"strconv"
-	"bufio"
-	"strings"
 )
-var DEBUG int=1 //Setting this to value 0 will disable console outputs
-func print(s string){
-	if DEBUG==1{
-		fmt.Println(s)
-	}
+
+var dict = make(map[string]string)
+
+type Command struct {
+	Operation string
+	Key       string
+	Value     string
 }
 
-const PORT = 12343
-var	dict=make(map[string] string)
-
-func main(){
-	listener, err := net.Listen("tcp", ":"+strconv.Itoa(PORT))
+func CreateServer(port int) {
+	responder, err := zmq.NewSocket(zmq.REP)
 	if err != nil {
-		panic("couldn't start listening on port"+strconv.Itoa(PORT)+". "+err.Error())
+		panic("couldn't start listening on port" + strconv.Itoa(port) + ". " + err.Error())
 	}
-	
-	print("Started Listening")
+	defer responder.Close()
+	responder.Bind("tcp://*:" + strconv.Itoa(port))
 	for {
-		conn, err := listener.Accept()
+		request, _ := responder.Recv(0)
+		var command Command
+		err := json.Unmarshal([]byte(request), &command)
 		if err != nil {
+			fmt.Println("Could not understand the request")
+			responder.Send(RESPONSE_INVALID_REQUEST, 0)
 			continue
 		}
-		print("Got client")
-		go handleConnection(conn)
+		reply := handleRequest(command)
+		responder.Send(reply, 0)
 	}
 }
 
-func handleConnection(conn net.Conn){
-	defer conn.Close()
-	reader:=bufio.NewReader(conn)
-		command, err :=reader.ReadString('\n')
-		if err!=nil{
-			fmt.Print(err.Error())
-			return
+func handleRequest(command Command) string {
+	operation := command.Operation
+	switch operation {
+	case OPERATION_GET:
+		key := command.Key
+		value, ok := dict[key]
+		if ok {
+			return value
+		} else {
+			return RESPONSE_KEY_NOT_FOUND
 		}
-		print("Received command:"+command)
-		words:=strings.Fields(command)
-		action:=words[0]
-		
-		switch action{
-			case "get":
-				key:=words[1]
-				value, ok := dict[key]
-				if ok{
-					conn.Write([]byte(value))
-				}else{
-					print("Key does not exist")
-					conn.Write([]byte("KEY_DOES_NOT_EXIST"))
-				}
-				
-			case "set":
-				key:=words[1]
-				value:=""
-				for i:=2;i<len(words);i++{
-					value+=words[i]+" "
-				}
-				value=value[:len(value)-1]
-				dict[key]=value
-				conn.Write([]byte("SUCCESS"))
-			case "delete":
-				key:=words[1]
-				_, ok:=dict[key]
-				if ok{
-					delete(dict,key)
-					conn.Write([]byte("SUCCESS"))
-				}else{
-					conn.Write([]byte("KEY_DOES_NOT_EXIST"))
-				}
+
+	case OPERATION_SET:
+		key := command.Key
+		value := command.Value
+		dict[key] = value
+		return "OK"
+
+	case OPERATION_DELETE:
+		key := command.Key
+		_, ok := dict[key]
+		if ok {
+			delete(dict, key)
+			return "OK"
+		} else {
+			return RESPONSE_KEY_NOT_FOUND
 		}
+
+	default:
+		return RESPONSE_INVALID_REQUEST
+	}
 }
