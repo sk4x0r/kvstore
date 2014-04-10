@@ -1,1 +1,5 @@
-..
+The motive was never to get AA, but learn new things. Having taken most of the theorotical courses during my MTech program, this course was a very good opportunity for me to learn extensive coding, get to know what happens in industry, and gather some basic knowledge related to cloud/distributed computing.
+
+The course tought me that tackling real life problems is far different from tackling them in theory. Though I am yet to learn a lot in distributed systems, the course exposed me to many of the basic concepts, classic algorithms and some programming approaches.
+
+Apart from above mentioned things, the course changed many of my programming styles. I had a dead github account before joining the course and I never thought of using it. But now, at the end of this course, I have become a big fan of github and will continue to make extensive use of the same. Similar to github account my stackoverflow account was also a dead thing. But now, I am a regular stackoverflow user, who not just asks the questions but also answers to question whenever possible.
